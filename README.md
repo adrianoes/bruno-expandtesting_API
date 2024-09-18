@@ -13,7 +13,7 @@ API testing in [expandtesting](https://practice.expandtesting.com/notes/api/api-
 # Installation:
 
 - See [Node.js page](https://nodejs.org/en) and install the aforementioned Node.js version. Keep all the preferenced options as they are.
-- See [Bruno page](https://www.usebruno.com/downloads), download and intall it. 
+- See [Bruno page](https://www.usebruno.com/downloads), download and install it. 
 - Open the project folder in terminal and execute ```npm install -g @usebruno/cli``` to install Bruno CLI.
 
 # Tests:
