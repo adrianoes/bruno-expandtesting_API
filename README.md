@@ -18,7 +18,7 @@ API testing in [expandtesting](https://practice.expandtesting.com/notes/api/api-
 
 # Tests:
 
-- Execute ```bru run --env expandtesting_env --output ../reports/report.json``` to run the expandtesting.json collection configured with the expandtesting_env.bru environment variable file via command line and have the report inside reports folder.
+- Execute ```bru run --env expandtesting_env --output ./reports/report.json``` to run the expandtesting.json collection configured with the expandtesting_env.bru environment variable file via command line and have the report inside reports folder.
 - Execute ```bru run --env expandtesting_env``` to run the expandtesting.json collection configured with the expandtesting_env.bru environment variable file via command line and have the results on terminal.
 
 # Support:
