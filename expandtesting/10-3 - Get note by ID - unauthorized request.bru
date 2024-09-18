@@ -1,0 +1,29 @@
+meta {
+  name: 10-3 - Get note by ID - unauthorized request
+  type: http
+  seq: 25
+}
+
+get {
+  url: {{base_url}}/notes/{{note_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  X-Auth-Token: @{{user_token}}
+}
+
+tests {
+  let responseGNUR = res.getBody();
+  
+  test("10.3 - Check get note by ID - unauthorized request success", function () {
+      expect(responseGNUR.success).to.be.equal(false);
+  });
+  test("10.3 - Check get note by ID - unauthorized request status", function () {
+      expect(responseGNUR.status).to.be.equal(401);
+  });
+  test("10.3 - Check get note by ID - unauthorized request message", function () {
+      expect(responseGNUR.message).to.be.equal("Access token is not valid or has expired, you will need to login");
+  });
+}

@@ -1,0 +1,30 @@
+meta {
+  name: 9-2 - Get all notes - bad request
+  type: http
+  seq: 21
+}
+
+get {
+  url: {{base_url}}/notes
+  body: none
+  auth: none
+}
+
+headers {
+  X-Auth-Token: {{user_token}}
+  x-content-format: badRequest
+}
+
+tests {
+  let responseGANBR = res.getBody();
+  
+  test("9.2 - Check get all notes - bad request success", function () {
+      expect(responseGANBR.success).to.be.equal(false);
+  });
+  test("9.2 - Check get all notes - bad request status", function () {
+      expect(responseGANBR.status).to.be.equal(400);
+  });
+  test("9.2 - Check get all notes - bad request message", function () {
+      expect(responseGANBR.message).to.be.equal("Invalid X-Content-Format header, Only application/json is supported.");
+  });
+}

@@ -1,0 +1,29 @@
+meta {
+  name: 9-3 - Get all notes - unauthorized request
+  type: http
+  seq: 22
+}
+
+get {
+  url: {{base_url}}/notes
+  body: none
+  auth: none
+}
+
+headers {
+  X-Auth-Token: @{{user_token}}
+}
+
+tests {
+  let responseGANUR = res.getBody();
+  
+  test("9.3 - Check get all notes - unauthorized request success", function () {
+      expect(responseGANUR.success).to.be.equal(false);
+  });
+  test("9.3 - Check get all notes - unauthorized request status", function () {
+      expect(responseGANUR.status).to.be.equal(401);
+  });
+  test("9.3 - Check get all notes - unauthorized request message", function () {
+      expect(responseGANUR.message).to.be.equal("Access token is not valid or has expired, you will need to login");
+  });
+}

@@ -1,0 +1,78 @@
+meta {
+  name: 9-1 - Get all notes
+  type: http
+  seq: 20
+}
+
+get {
+  url: {{base_url}}/notes
+  body: none
+  auth: none
+}
+
+headers {
+  X-Auth-Token: {{user_token}}
+}
+
+tests {
+  let responseGAN = res.getBody();
+  
+  test("9.1 - Check get all notes success", function () {
+      expect(responseGAN.success).to.be.equal(true);
+  });
+  test("9.1 - Check get all notes status", function () {
+      expect(responseGAN.status).to.be.equal(200);
+  });
+  test("9.1 - Check get all notes message", function () {
+      expect(responseGAN.message).to.be.equal("Notes successfully retrieved");
+  });
+  test("9.1 - Assert note id", function () {
+      expect(bru.getEnvVar("note_id")).to.be.equal(responseGAN.data[1].id);
+  });
+  test("9.1 - Assert note title", function () {
+      expect(bru.getEnvVar("note_title")).to.be.equal(responseGAN.data[1].title);
+  });
+  test("9.1 - Assert note description", function () {
+      expect(bru.getEnvVar("note_description")).to.be.equal(responseGAN.data[1].description);
+  });
+  test("9.1 - Assert note category", function () {
+      expect(bru.getEnvVar("note_category")).to.be.equal(responseGAN.data[1].category);
+  });
+  test("9.1 - Assert note completed", function () {
+      expect(bru.getEnvVar("note_completed")).to.be.equal(responseGAN.data[1].completed);
+  });
+  test("9.1 - Assert note created_at", function () {
+      expect(bru.getEnvVar("note_created_at")).to.be.equal(responseGAN.data[1].created_at);
+  });
+  test("9.1 - Assert note updated_at", function () {
+      expect(bru.getEnvVar("note_updated_at")).to.be.equal(responseGAN.data[1].updated_at);
+  });
+  test("9.1 - Assert user id for note", function () {
+      expect(bru.getEnvVar("user_id")).to.be.equal(responseGAN.data[1].user_id);
+  });
+  test("9.1 - Assert note 2 id", function () {
+      expect(bru.getEnvVar("note_id_2")).to.be.equal(responseGAN.data[0].id);
+  });
+  test("9.1 - Assert note 2 title", function () {
+      expect(bru.getEnvVar("note_title_2")).to.be.equal(responseGAN.data[0].title);
+  });
+  test("9.1 - Assert note 2 description", function () {
+      expect(bru.getEnvVar("note_description_2")).to.be.equal(responseGAN.data[0].description);
+  });
+  test("9.1 - Assert note 2 category", function () {
+      expect(bru.getEnvVar("note_category_2")).to.be.equal(responseGAN.data[0].category);
+  });
+  test("9.1 - Assert note 2 completed", function () {
+      expect(bru.getEnvVar("note_completed_2")).to.be.equal(responseGAN.data[0].completed);
+  });
+  test("9.1 - Assert note 2 created_at", function () {
+      expect(bru.getEnvVar("note_created_at_2")).to.be.equal(responseGAN.data[0].created_at);
+  });
+  test("9.1 - Assert note 2 updated_at", function () {
+      expect(bru.getEnvVar("note_updated_at_2")).to.be.equal(responseGAN.data[0].updated_at);
+  });
+  test("9.1 - Assert user id for note 2", function () {
+      expect(bru.getEnvVar("user_id")).to.be.equal(responseGAN.data[0].user_id);
+  });
+  
+}

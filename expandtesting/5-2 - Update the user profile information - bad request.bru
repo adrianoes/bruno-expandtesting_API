@@ -1,0 +1,42 @@
+meta {
+  name: 5-2 - Update the user profile information - bad request
+  type: http
+  seq: 11
+}
+
+patch {
+  url: {{base_url}}/users/profile
+  body: json
+  auth: none
+}
+
+headers {
+  X-Auth-Token: {{user_token}}
+}
+
+body:json {
+  {
+      "name":"6@#",
+      "phone":"{{user_phone}}",
+      "company":"{{user_company}}"
+  }
+}
+
+script:pre-request {
+  
+  
+}
+
+tests {
+  let responseUUBR = res.getBody();
+  
+  test("5.2 - Check update the user profile information - bad request success", function () {
+      expect(responseUUBR.success).to.be.equal(false);
+  });
+  test("5.2 - Check update the user profile information - bad request status", function () {
+      expect(responseUUBR.status).to.be.equal(400);
+  });
+  test("5.2 - Check update the user profile information - bad request message", function () {
+      expect(responseUUBR.message).to.be.equal("User name must be between 4 and 30 characters");
+  });
+}

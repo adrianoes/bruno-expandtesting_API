@@ -1,0 +1,29 @@
+meta {
+  name: 13-1 - Delete a note by ID - bad request
+  type: http
+  seq: 32
+}
+
+delete {
+  url: {{base_url}}/notes/@{{note_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  X-Auth-Token: {{user_token}}
+}
+
+tests {
+  let responseDNBR = res.getBody();
+  
+  test("13.1 - Check delete a note by ID - bad request success", function () {
+      expect(responseDNBR.success).to.be.equal(false);
+  });
+  test("13.1 - Check delete a note by ID - bad request status", function () {
+      expect(responseDNBR.status).to.be.equal(400);
+  });
+  test("13.1 - Check delete a note by ID - bad request message", function () {
+      expect(responseDNBR.message).to.be.equal("Note ID must be a valid ID");
+  });
+}

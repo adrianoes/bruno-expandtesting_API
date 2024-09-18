@@ -1,0 +1,29 @@
+meta {
+  name: 16-2 - Delete user account - unauthorized request
+  type: http
+  seq: 40
+}
+
+delete {
+  url: {{base_url}}/users/delete-account
+  body: none
+  auth: none
+}
+
+headers {
+  X-Auth-Token: @{{user_token}}
+}
+
+tests {
+  let responseDUUR = res.getBody();
+  
+  test("16.2 - Check delete user account - unauthorized request success", function () {
+      expect(responseDUUR.success).to.be.equal(false);
+  });
+  test("16.2 - Check delete user account - unauthorized request status", function () {
+      expect(responseDUUR.status).to.be.equal(401);
+  });
+  test("16.2 - Check delete user account - unauthorized request message", function () {
+      expect(responseDUUR.message).to.be.equal("Access token is not valid or has expired, you will need to login");
+  });
+}

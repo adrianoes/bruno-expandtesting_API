@@ -1,0 +1,53 @@
+meta {
+  name: 10-1 - Get note by ID
+  type: http
+  seq: 23
+}
+
+get {
+  url: {{base_url}}/notes/{{note_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  X-Auth-Token: {{user_token}}
+}
+
+tests {
+  let responseGN = res.getBody();
+  
+  test("10.1 - Check get note by ID success", function () {
+      expect(responseGN.success).to.be.equal(true);
+  });
+  test("10.1 - Check get note by ID status", function () {
+      expect(responseGN.status).to.be.equal(200);
+  });
+  test("10.1 - Check get note by ID message", function () {
+      expect(responseGN.message).to.be.equal("Note successfully retrieved");
+  });
+  test("10.1 - Assert note id", function () {
+      expect(bru.getEnvVar("note_id")).to.be.equal(responseGN.data.id);
+  });
+  test("10.1 - Assert note title", function () {
+      expect(bru.getEnvVar("note_title")).to.be.equal(responseGN.data.title);
+  });
+  test("10.1 - Assert note description", function () {
+      expect(bru.getEnvVar("note_description")).to.be.equal(responseGN.data.description);
+  });
+  test("10.1 - Assert note category", function () {
+      expect(bru.getEnvVar("note_category")).to.be.equal(responseGN.data.category);
+  });
+  test("10.1 - Assert note completed", function () {
+      expect(bru.getEnvVar("note_completed")).to.be.equal(responseGN.data.completed);
+  });
+  test("10.1 - Assert note created_at", function () {
+      expect(bru.getEnvVar("note_created_at")).to.be.equal(responseGN.data.created_at);
+  });
+  test("10.1 - Assert note updated_at", function () {
+      expect(bru.getEnvVar("note_updated_at")).to.be.equal(responseGN.data.updated_at);
+  });
+  test("10.1 - Assert user id for note", function () {
+      expect(bru.getEnvVar("user_id")).to.be.equal(responseGN.data.user_id);
+  });
+}

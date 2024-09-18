@@ -1,0 +1,29 @@
+meta {
+  name: 13-2 - Delete a note by ID - unauthorized request
+  type: http
+  seq: 33
+}
+
+delete {
+  url: {{base_url}}/notes/{{note_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  X-Auth-Token: @{{user_token}}
+}
+
+tests {
+  let responseDNUR = res.getBody();
+  
+  test("13.2 - Check delete a note by ID - unauthorized request success", function () {
+      expect(responseDNUR.success).to.be.equal(false);
+  });
+  test("13.2 - Check delete a note by ID - unauthorized request status", function () {
+      expect(responseDNUR.status).to.be.equal(401);
+  });
+  test("13.2 - Check delete a note by ID - unauthorized request message", function () {
+      expect(responseDNUR.message).to.be.equal("Access token is not valid or has expired, you will need to login");
+  });
+}

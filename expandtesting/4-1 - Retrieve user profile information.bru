@@ -1,0 +1,38 @@
+meta {
+  name: 4-1 - Retrieve user profile information
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{base_url}}/users/profile
+  body: none
+  auth: none
+}
+
+headers {
+  X-Auth-Token: {{user_token}}
+}
+
+tests {
+  let responseRU = res.getBody();
+  
+  test("4.1 - Check retrieve user profile information success", function () {
+      expect(responseRU.success).to.be.equal(true);
+  });
+  test("4.1 - Check retrieve user profile information status", function () {
+      expect(responseRU.status).to.be.equal(200);
+  });
+  test("4.1 - Check retrieve user profile information message", function () {
+      expect(responseRU.message).to.be.equal("Profile successful");
+  });
+  test("4.1 - Assert user id", function () {
+      expect(bru.getEnvVar("user_id")).to.be.equal(responseRU.data.id);
+  });
+  test("4.1 - Assert user name", function () {
+      expect(bru.getEnvVar("user_name")).to.be.equal(responseRU.data.name);
+  });
+  test("4 - Assert user e-mail", function () {
+      expect(bru.getEnvVar("user_email")).to.be.equal(responseRU.data.email);
+  });
+}

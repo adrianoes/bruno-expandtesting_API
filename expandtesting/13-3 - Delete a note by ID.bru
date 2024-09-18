@@ -1,0 +1,29 @@
+meta {
+  name: 13-3 - Delete a note by ID
+  type: http
+  seq: 34
+}
+
+delete {
+  url: {{base_url}}/notes/{{note_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  X-Auth-Token: {{user_token}}
+}
+
+tests {
+  let responseDN = res.getBody();
+  
+  test("13.3 - Check delete a note by ID success", function () {
+      expect(responseDN.success).to.be.equal(true);
+  });
+  test("13.3 - Check delete a note by ID status", function () {
+      expect(responseDN.status).to.be.equal(200);
+  });
+  test("13.3 - Check delete a note by ID message", function () {
+      expect(responseDN.message).to.be.equal("Note successfully deleted");
+  });
+}

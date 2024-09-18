@@ -1,0 +1,43 @@
+meta {
+  name: 3-1 - Log in as an existing user
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/users/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "email":"{{user_email}}",
+      "password":"{{user_password}}"
+  }
+}
+
+tests {
+  let responseLU = res.getBody();
+  
+  bru.setEnvVar("user_token", responseLU.data.token);
+  
+  test("3.1 - Check log in as an existing user success", function () {
+      expect(responseLU.success).to.be.equal(true);
+  });
+  test("3.1 - Check log in as an existing user status", function () {
+      expect(responseLU.status).to.be.equal(200);
+  });
+  test("3.1 - Check log in as an existing user message", function () {
+      expect(responseLU.message).to.be.equal("Login successful");
+  });
+  test("3.1 - Assert user id", function () {
+      expect(bru.getEnvVar("user_id")).to.be.equal(responseLU.data.id);
+  });
+  test("3.1 - Assert user name", function () {
+      expect(bru.getEnvVar("user_name")).to.be.equal(responseLU.data.name);
+  });
+  test("3.1 - Assert user e-mail", function () {
+      expect(bru.getEnvVar("user_email")).to.be.equal(responseLU.data.email);
+  });
+}

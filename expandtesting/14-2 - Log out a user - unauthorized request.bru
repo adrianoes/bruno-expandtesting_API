@@ -1,0 +1,29 @@
+meta {
+  name: 14-2 - Log out a user - unauthorized request
+  type: http
+  seq: 36
+}
+
+delete {
+  url: {{base_url}}/users/logout
+  body: none
+  auth: none
+}
+
+headers {
+  X-Auth-Token: @{{user_token}}
+}
+
+tests {
+  let responseLOUUR = res.getBody();
+  
+  test("14.2 - Check log out a user - unauthorized request success", function () {
+      expect(responseLOUUR.success).to.be.equal(false);
+  });
+  test("14.2 - Check log out a user - unauthorized request status", function () {
+      expect(responseLOUUR.status).to.be.equal(401);
+  });
+  test("14.2 - Check log out a user - unauthorized request message", function () {
+      expect(responseLOUUR.message).to.be.equal("Access token is not valid or has expired, you will need to login");
+  });
+}

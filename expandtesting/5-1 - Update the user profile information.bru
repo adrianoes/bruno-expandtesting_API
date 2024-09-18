@@ -1,0 +1,67 @@
+meta {
+  name: 5-1 - Update the user profile information
+  type: http
+  seq: 10
+}
+
+patch {
+  url: {{base_url}}/users/profile
+  body: json
+  auth: none
+}
+
+headers {
+  X-Auth-Token: {{user_token}}
+}
+
+body:json {
+  {
+      "name":"{{user_name}}",
+      "phone":"{{user_phone}}",
+      "company":"{{user_company}}"
+  }
+}
+
+script:pre-request {
+  var random = Math.floor(Math.random() * 100000)+1000000000;
+  bru.setEnvVar("randomValue", random.toString());
+  
+  bru.setEnvVar("user_name", bru.getEnvVar("randomValue")+" test");
+  
+  bru.setEnvVar("user_phone", bru.getEnvVar("randomValue"));
+  
+  bru.setEnvVar("user_company", bru.getEnvVar("randomValue")+" S.A.");
+  
+}
+
+tests {
+  let responseUU = res.getBody();
+  
+  test("5.1 - Check update the user profile information success", function () {
+      expect(responseUU.success).to.be.equal(true);
+  });
+  test("5.1 - Check update the user profile information status", function () {
+      expect(responseUU.status).to.be.equal(200);
+  });
+  test("5.1 - Check update the user profile information message", function () {
+      expect(responseUU.message).to.be.equal("Profile updated successful");
+  });
+  test("5.1 - Assert user id", function () {
+      expect(bru.getEnvVar("user_id")).to.be.equal(responseUU.data.id);
+  });
+  test("5.1 - Assert user name", function () {
+      expect(bru.getEnvVar("user_name")).to.be.equal(responseUU.data.name);
+  });
+  test("5.1 - Assert user e-mail", function () {
+      expect(bru.getEnvVar("user_email")).to.be.equal(responseUU.data.email);
+  });
+  test("5.1 - Assert user phone", function () {
+      expect(bru.getEnvVar("user_phone")).to.be.equal(responseUU.data.phone);
+  });
+  test("5.1 - Assert user company", function () {
+      expect(bru.getEnvVar("user_company")).to.be.equal(responseUU.data.company);
+  });
+  
+  
+  
+}

@@ -1,0 +1,30 @@
+meta {
+  name: 10-2 - Get note by ID - bad request
+  type: http
+  seq: 24
+}
+
+get {
+  url: {{base_url}}/notes/{{note_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  X-Auth-Token: {{user_token}}
+  x-content-format: badRequest
+}
+
+tests {
+  let responseGNBR = res.getBody();
+  
+  test("10.2 - Check get note by ID - bad request success", function () {
+      expect(responseGNBR.success).to.be.equal(false);
+  });
+  test("10.2 - Check get note by ID - bad request status", function () {
+      expect(responseGNBR.status).to.be.equal(400);
+  });
+  test("10.2 - Check get note by ID - bad request message", function () {
+      expect(responseGNBR.message).to.be.equal("Invalid X-Content-Format header, Only application/json is supported.");
+  });
+}

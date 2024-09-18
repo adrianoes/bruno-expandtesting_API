@@ -1,0 +1,30 @@
+meta {
+  name: 14-1 - Log out a user - bad request
+  type: http
+  seq: 35
+}
+
+delete {
+  url: {{base_url}}/users/logout
+  body: none
+  auth: none
+}
+
+headers {
+  X-Auth-Token: {{user_token}}
+  x-content-format: badRequest
+}
+
+tests {
+  let responseLOUBR = res.getBody();
+  
+  test("14.1 - Check log out a user - bad request success", function () {
+      expect(responseLOUBR.success).to.be.equal(false);
+  });
+  test("14.1 - Check log out a user - bad request status", function () {
+      expect(responseLOUBR.status).to.be.equal(400);
+  });
+  test("14.1 - Check log out a user - bad request message", function () {
+      expect(responseLOUBR.message).to.be.equal("Invalid X-Content-Format header, Only application/json is supported.");
+  });
+}

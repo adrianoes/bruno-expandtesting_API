@@ -1,0 +1,44 @@
+meta {
+  name: 12-3 - Update the completed status of a note - unauthorized request
+  type: http
+  seq: 31
+}
+
+patch {
+  url: {{base_url}}/notes/{{note_id}}
+  body: json
+  auth: none
+}
+
+headers {
+  X-Auth-Token: @{{user_token}}
+}
+
+body:json {
+  {
+      "completed":"{{note_completed}}"
+  }
+}
+
+script:pre-request {
+  if (bru.getEnvVar("note_completed") == false) { 
+  bru.setEnvVar("note_completed", true);
+  }
+  else { 
+  bru.setEnvVar("note_completed", false);
+  }
+}
+
+tests {
+  let responseUCSNUR = res.getBody();
+  
+  test("12.3 - Check update the completed status of a note - unauthorized request success", function () {
+      expect(responseUCSNUR.success).to.be.equal(false);
+  });
+  test("12.3 - Check update the completed status of a note - unauthorized request status", function () {
+      expect(responseUCSNUR.status).to.be.equal(401);
+  });
+  test("12.3 - Check update the completed status of a note - unauthorized request message", function () {
+      expect(responseUCSNUR.message).to.be.equal("Access token is not valid or has expired, you will need to login");
+  });
+}

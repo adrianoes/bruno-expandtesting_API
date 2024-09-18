@@ -1,0 +1,43 @@
+meta {
+  name: 15 - Log in after log out
+  type: http
+  seq: 38
+}
+
+post {
+  url: {{base_url}}/users/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "email":"{{user_email}}",
+      "password":"{{user_password}}"
+  }
+}
+
+tests {
+  let responseLIALOU = res.getBody();
+  
+  bru.setEnvVar("user_token", responseLIALOU.data.token);
+  
+  test("15 - Check log in after log out success", function () {
+      expect(responseLIALOU.success).to.be.equal(true);
+  });
+  test("15 - Check log in after log out status", function () {
+      expect(responseLIALOU.status).to.be.equal(200);
+  });
+  test("15 - Check log in after log out message", function () {
+      expect(responseLIALOU.message).to.be.equal("Login successful");
+  });
+  test("15 - Assert user id", function () {
+      expect(bru.getEnvVar("user_id")).to.be.equal(responseLIALOU.data.id);
+  });
+  test("15 - Assert user name", function () {
+      expect(bru.getEnvVar("user_name")).to.be.equal(responseLIALOU.data.name);
+  });
+  test("15 - Assert user e-mail", function () {
+      expect(bru.getEnvVar("user_email")).to.be.equal(responseLIALOU.data.email);
+  });
+}

@@ -1,0 +1,67 @@
+meta {
+  name: 7-1 - Creates a new note
+  type: http
+  seq: 16
+}
+
+post {
+  url: {{base_url}}/notes
+  body: json
+  auth: none
+}
+
+headers {
+  X-Auth-Token: {{user_token}}
+}
+
+body:json {
+  {
+      "title":"{{note_title}}",
+      "description":"{{note_description}}",
+      "category":"{{note_category}}"
+  }
+}
+
+script:pre-request {
+  var categoryArray = ['Home', 'Work', 'Personal'];
+  var random = Math.floor(Math.random() * 1000)+1000;
+  bru.setEnvVar("randomValue", random.toString());
+  
+  bru.setEnvVar("note_category", categoryArray[Math.floor(Math.random()*categoryArray.length)]);
+  bru.setEnvVar("note_description", bru.getEnvVar("randomValue")+" description");
+  bru.setEnvVar("note_title", bru.getEnvVar("randomValue")+" title");
+  
+}
+
+tests {
+  let responseCN = res.getBody();
+  
+  bru.setEnvVar("note_id", responseCN.data.id);
+  bru.setEnvVar("note_completed", responseCN.data.completed);
+  bru.setEnvVar("note_created_at", responseCN.data.created_at);
+  bru.setEnvVar("note_updated_at", responseCN.data.updated_at);
+  
+  test("7.1 - Check creates a new note success", function () {
+      expect(responseCN.success).to.be.equal(true);
+  });
+  test("7.1 - Check creates a new note status", function () {
+      expect(responseCN.status).to.be.equal(200);
+  });
+  test("7.1 - Check creates a new note message", function () {
+      expect(responseCN.message).to.be.equal("Note successfully created");
+  });
+  test("7.1 - Assert note title", function () {
+      expect(bru.getEnvVar("note_title")).to.be.equal(responseCN.data.title);
+  });
+  test("7.1 - Assert note description", function () {
+      expect(bru.getEnvVar("note_description")).to.be.equal(responseCN.data.description);
+  });
+  test("7.1 - Assert note category", function () {
+      expect(bru.getEnvVar("note_category")).to.be.equal(responseCN.data.category);
+  });
+  test("7.1 - Assert user id", function () {
+      expect(bru.getEnvVar("user_id")).to.be.equal(responseCN.data.user_id);
+  });
+  
+  
+}

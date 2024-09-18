@@ -1,0 +1,35 @@
+meta {
+  name: 12-2 - Update the completed status of a note - bad request
+  type: http
+  seq: 30
+}
+
+patch {
+  url: {{base_url}}/notes/{{note_id}}
+  body: json
+  auth: none
+}
+
+headers {
+  X-Auth-Token: {{user_token}}
+}
+
+body:json {
+  {
+      "completed":"a"
+  }
+}
+
+tests {
+  let responseUCSNBR = res.getBody();
+  
+  test("12.2 - Check update the completed status of a note - bad request success", function () {
+      expect(responseUCSNBR.success).to.be.equal(false);
+  });
+  test("12.2 - Check update the completed status of a note - bad request status", function () {
+      expect(responseUCSNBR.status).to.be.equal(400);
+  });
+  test("12.2 - Check update the completed status of a note - bad request message", function () {
+      expect(responseUCSNBR.message).to.be.equal("Note completed status must be boolean");
+  });
+}

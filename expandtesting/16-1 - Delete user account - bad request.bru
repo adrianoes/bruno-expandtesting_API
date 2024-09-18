@@ -1,0 +1,30 @@
+meta {
+  name: 16-1 - Delete user account - bad request
+  type: http
+  seq: 39
+}
+
+delete {
+  url: {{base_url}}/users/delete-account
+  body: none
+  auth: none
+}
+
+headers {
+  X-Auth-Token: {{user_token}}
+  x-content-format: badRequest
+}
+
+tests {
+  let responseDUBR = res.getBody();
+  
+  test("16.1 - Check delete user account - bad request success", function () {
+      expect(responseDUBR.success).to.be.equal(false);
+  });
+  test("16.1 - Check delete user account - bad request status", function () {
+      expect(responseDUBR.status).to.be.equal(400);
+  });
+  test("16.1 - Check delete user account - bad request message", function () {
+      expect(responseDUBR.message).to.be.equal("Invalid X-Content-Format header, Only application/json is supported.");
+  });
+}

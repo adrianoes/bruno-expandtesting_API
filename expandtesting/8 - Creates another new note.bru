@@ -1,0 +1,66 @@
+meta {
+  name: 8 - Creates another new note
+  type: http
+  seq: 19
+}
+
+post {
+  url: {{base_url}}/notes
+  body: json
+  auth: none
+}
+
+headers {
+  X-Auth-Token: {{user_token}}
+}
+
+body:json {
+  {
+      "title":"{{note_title_2}}",
+      "description":"{{note_description_2}}",
+      "category":"{{note_category_2}}"
+  }
+}
+
+script:pre-request {
+  var categoryArray = ['Home', 'Work', 'Personal'];
+  var random = Math.floor(Math.random() * 1000)+1000;
+  bru.setEnvVar("randomValue", random.toString());
+  
+  bru.setEnvVar("note_category_2", categoryArray[Math.floor(Math.random()*categoryArray.length)]);
+  bru.setEnvVar("note_description_2", bru.getEnvVar("randomValue")+" description");
+  bru.setEnvVar("note_title_2", bru.getEnvVar("randomValue")+" title");
+}
+
+tests {
+  let responseCAN = res.getBody();
+  
+  bru.setEnvVar("note_id_2", responseCAN.data.id);
+  bru.setEnvVar("note_completed_2", responseCAN.data.completed);
+  bru.setEnvVar("note_created_at_2", responseCAN.data.created_at);
+  bru.setEnvVar("note_updated_at_2", responseCAN.data.updated_at);
+  
+  test("8 - Check creates another new note success", function () {
+      expect(responseCAN.success).to.be.equal(true);
+  });
+  test("8 - Check creates another new note status", function () {
+      expect(responseCAN.status).to.be.equal(200);
+  });
+  test("8 - Check creates another new note message", function () {
+      expect(responseCAN.message).to.be.equal("Note successfully created");
+  });
+  test("8 - Assert note title", function () {
+      expect(bru.getEnvVar("note_title_2")).to.be.equal(responseCAN.data.title);
+  });
+  test("8 - Assert note description", function () {
+      expect(bru.getEnvVar("note_description_2")).to.be.equal(responseCAN.data.description);
+  });
+  test("8 - Assert note category", function () {
+      expect(bru.getEnvVar("note_category_2")).to.be.equal(responseCAN.data.category);
+  });
+  test("8 - Assert user id", function () {
+      expect(bru.getEnvVar("user_id")).to.be.equal(responseCAN.data.user_id);
+  });
+  
+  
+}

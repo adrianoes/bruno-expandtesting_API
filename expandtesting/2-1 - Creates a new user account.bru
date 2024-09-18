@@ -1,0 +1,64 @@
+meta {
+  name: 2-1 - Creates a new user account
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/users/register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "name":"{{user_name}}",
+      "email":"{{user_email}}",
+      "password":"{{user_password}}"
+  }
+}
+
+script:pre-request {
+  var random = Math.floor(Math.random() * 1000)+1000;
+  bru.setEnvVar("randomValue", random.toString());
+  
+  bru.setEnvVar("user_name", bru.getEnvVar("randomValue")+" test");
+  
+  bru.setEnvVar("user_email", bru.getEnvVar("randomValue")+"@test.com");
+  
+  bru.setEnvVar("user_password", bru.getEnvVar("randomValue")+"_pw");
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+}
+
+tests {
+  let responseCU = res.getBody();
+  
+  bru.setEnvVar("user_id", responseCU.data.id);
+  
+  test("2.1 - Check creates a new user account success", function () {
+      expect(responseCU.success).to.be.equal(true);
+  });
+  test("2.1 - Check creates a new user account status", function () {
+      expect(responseCU.status).to.be.equal(201);
+  });
+  test("2.1 - Check creates a new user account message", function () {
+      expect(responseCU.message).to.be.equal("User account created successfully");
+  });
+  test("2.1 - Assert created name", function () {
+      expect(responseCU.data.name).to.be.equal(bru.getEnvVar("user_name"));
+  });
+  test("2.1 - Assert created e-mail", function () {
+      expect(responseCU.data.email).to.be.equal(bru.getEnvVar("user_email"));
+  });
+  
+  
+}

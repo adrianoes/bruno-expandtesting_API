@@ -1,0 +1,40 @@
+meta {
+  name: 7-2 - Creates a new note - bad request
+  type: http
+  seq: 17
+}
+
+post {
+  url: {{base_url}}/notes
+  body: json
+  auth: none
+}
+
+headers {
+  X-Auth-Token: {{user_token}}
+}
+
+body:json {
+  {
+      "title":"{{note_title}}",
+      "description":"{{note_description}}",
+      "category":"a"
+  }
+}
+
+tests {
+  let responseCNBR = res.getBody();
+  
+  test("7.2 - Check creates a new note - bad request success", function () {
+      expect(responseCNBR.success).to.be.equal(false);
+  });
+  test("7.2 - Check creates a new note - bad request status", function () {
+      expect(responseCNBR.status).to.be.equal(400);
+  });
+  test("7.2 - Check creates a new note - bad request message", function () {
+      expect(responseCNBR.message).to.be.equal("Category must be one of the categories: Home, Work, Personal");
+  });
+  
+  
+  
+}

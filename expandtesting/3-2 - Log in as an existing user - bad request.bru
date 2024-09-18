@@ -1,0 +1,32 @@
+meta {
+  name: 3-2 - Log in as an existing user - bad request
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{base_url}}/users/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "email":"@{{user_email}}",
+      "password":"{{user_password}}"
+  }
+}
+
+tests {
+  let responseLUBR = res.getBody();
+  
+  test("3.2 - Check log in as an existing user - bad request success", function () {
+      expect(responseLUBR.success).to.be.equal(false);
+  });
+  test("3.2 - Check log in as an existing user - bad request status", function () {
+      expect(responseLUBR.status).to.be.equal(400);
+  });
+  test("3.2 - Check log in as an existing user - bad request message", function () {
+      expect(responseLUBR.message).to.be.equal("A valid email address is required");
+  });
+}

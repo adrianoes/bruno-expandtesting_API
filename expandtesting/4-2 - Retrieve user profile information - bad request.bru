@@ -1,0 +1,30 @@
+meta {
+  name: 4-2 - Retrieve user profile information - bad request
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{base_url}}/users/profile
+  body: none
+  auth: none
+}
+
+headers {
+  X-Auth-Token: {{user_token}}
+  x-content-format: badRequest
+}
+
+tests {
+  let responseRUBR = res.getBody();
+  
+  test("4.2 - Check retrieve user profile information - bad request success", function () {
+      expect(responseRUBR.success).to.be.equal(false);
+  });
+  test("4.2 - Check retrieve user profile information - bad request status", function () {
+      expect(responseRUBR.status).to.be.equal(400);
+  });
+  test("4.2 - Check retrieve user profile information - bad request message", function () {
+      expect(responseRUBR.message).to.be.equal("Invalid X-Content-Format header, Only application/json is supported.");
+  });
+}

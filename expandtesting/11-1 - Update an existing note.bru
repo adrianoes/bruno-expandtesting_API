@@ -1,0 +1,71 @@
+meta {
+  name: 11-1 - Update an existing note
+  type: http
+  seq: 26
+}
+
+put {
+  url: {{base_url}}/notes/{{note_id}}
+  body: json
+  auth: none
+}
+
+headers {
+  X-Auth-Token: {{user_token}}
+}
+
+body:json {
+  {
+      "title":"{{note_title}}",
+      "description":"{{note_description}}",
+      "category":"{{note_category}}",
+      "completed":"{{note_completed}}"
+  }
+}
+
+script:pre-request {
+  var categoryArray = ['Home', 'Work', 'Personal'];
+  var random = Math.floor(Math.random() * 1000)+1000;
+  bru.setEnvVar("randomValue", random.toString());
+  
+  bru.setEnvVar("note_category", categoryArray[Math.floor(Math.random()*categoryArray.length)]);
+  bru.setEnvVar("note_description", bru.getEnvVar("randomValue")+" description");
+  bru.setEnvVar("note_title", bru.getEnvVar("randomValue")+" title");
+  bru.setEnvVar("note_completed", "true");
+}
+
+tests {
+  let responseUN = res.getBody();
+  
+  test("11.1  - Check update an existing note success", function () {
+      expect(responseUN.success).to.be.equal(true);
+  });
+  test("11.1  - Check update an existing note status", function () {
+      expect(responseUN.status).to.be.equal(200);
+  });
+  test("11.1  - Check update an existing note message", function () {
+      expect(responseUN.message).to.be.equal("Note successfully Updated");
+  });
+  test("11.1  - Assert note id", function () {
+      expect(bru.getEnvVar("note_id")).to.be.equal(responseUN.data.id);
+  });
+  test("11.1  - Assert note title", function () {
+      expect(bru.getEnvVar("note_title")).to.be.equal(responseUN.data.title);
+  });
+  test("11.1  - Assert note description", function () {
+      expect(bru.getEnvVar("note_description")).to.be.equal(responseUN.data.description);
+  });
+  test("11.1  - Assert note category", function () {
+      expect(bru.getEnvVar("note_category")).to.be.equal(responseUN.data.category);
+  });
+  test("11.1  - Assert note completed", function () {
+      // It uses == due to the fact that the compared values are a boolean and a string
+      expect(bru.getEnvVar("note_completed")) == (responseUN.data.completed);
+  });
+  test("11.1  - Assert note created_at", function () {
+      expect(bru.getEnvVar("note_created_at")).to.be.equal(responseUN.data.created_at);
+  });
+  test("11.1  - Assert user id for note", function () {
+      expect(bru.getEnvVar("user_id")).to.be.equal(responseUN.data.user_id);
+  });
+}

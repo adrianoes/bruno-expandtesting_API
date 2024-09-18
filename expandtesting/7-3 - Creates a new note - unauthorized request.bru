@@ -1,0 +1,40 @@
+meta {
+  name: 7-3 - Creates a new note - unauthorized request
+  type: http
+  seq: 18
+}
+
+post {
+  url: {{base_url}}/notes
+  body: json
+  auth: none
+}
+
+headers {
+  X-Auth-Token: @{{user_token}}
+}
+
+body:json {
+  {
+      "title":"{{note_title}}",
+      "description":"{{note_description}}",
+      "category":"{{note_category}}"
+  }
+}
+
+tests {
+  let responseCNUR = res.getBody();
+  
+  test("7.3 - Check creates a new note - unauthorized request success", function () {
+      expect(responseCNUR.success).to.be.equal(false);
+  });
+  test("7.3 - Check creates a new note - unauthorized request status", function () {
+      expect(responseCNUR.status).to.be.equal(401);
+  });
+  test("7.3 - Check creates a new note - unauthorized request message", function () {
+      expect(responseCNUR.message).to.be.equal("Access token is not valid or has expired, you will need to login");
+  });
+  
+  
+  
+}

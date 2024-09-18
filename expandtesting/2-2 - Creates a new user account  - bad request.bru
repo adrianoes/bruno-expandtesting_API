@@ -1,0 +1,45 @@
+meta {
+  name: 2-2 - Creates a new user account  - bad request
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/users/register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "name":"{{user_name}}",
+      "email":"@{{user_email}}",
+      "password":"{{user_password}}"
+  }
+}
+
+script:pre-request {
+  
+  
+  
+  
+  
+  
+  
+}
+
+tests {
+  let responseCUBR = res.getBody();
+  
+  test("2.2 - Check creates a new user account - bad request success", function () {
+      expect(responseCUBR.success).to.be.equal(false);
+  });
+  test("2.2 - Check creates a new user account - bad request status", function () {
+      expect(responseCUBR.status).to.be.equal(400);
+  });
+  test("2.2 - Check creates a new user account - bad request message", function () {
+      expect(responseCUBR.message).to.be.equal("A valid email address is required");
+  });
+  
+  
+}

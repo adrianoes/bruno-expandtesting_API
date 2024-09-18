@@ -1,0 +1,37 @@
+meta {
+  name: 5-3 - Update the user profile information - unauthorized request
+  type: http
+  seq: 12
+}
+
+patch {
+  url: {{base_url}}/users/profile
+  body: json
+  auth: none
+}
+
+headers {
+  X-Auth-Token: @{{user_token}}
+}
+
+body:json {
+  {
+      "name":"{{user_name}}",
+      "phone":"{{user_phone}}",
+      "company":"{{user_company}}"
+  }
+}
+
+tests {
+  let responseUUUR = res.getBody();
+  
+  test("5.3 - Check update the user profile information - unauthorized request success", function () {
+      expect(responseUUUR.success).to.be.equal(false);
+  });
+  test("5.3 - Check update the user profile information - unauthorized request status", function () {
+      expect(responseUUUR.status).to.be.equal(401);
+  });
+  test("5.3 - Check update the user profile information - unauthorized request message", function () {
+      expect(responseUUUR.message).to.be.equal("Access token is not valid or has expired, you will need to login");
+  });
+}

@@ -1,0 +1,29 @@
+meta {
+  name: 4-3 - Retrieve user profile information - unauthorized request
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{base_url}}/users/profile
+  body: none
+  auth: none
+}
+
+headers {
+  X-Auth-Token: @{{user_token}}
+}
+
+tests {
+  let responseRUUR = res.getBody();
+  
+  test("4.3 - Check retrieve user profile information - unauthorized request success", function () {
+      expect(responseRUUR.success).to.be.equal(false);
+  });
+  test("4.3 - Check retrieve user profile information - unauthorized request status", function () {
+      expect(responseRUUR.status).to.be.equal(401);
+  });
+  test("4.3 - Check retrieve user profile information - unauthorized request message", function () {
+      expect(responseRUUR.message).to.be.equal("Access token is not valid or has expired, you will need to login");
+  });
+}

@@ -1,0 +1,27 @@
+meta {
+  name: 1 - Check the health of the API Notes services
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/health-check
+  body: none
+  auth: none
+}
+
+tests {
+  let responseCAPIH = res.getBody();
+  
+  test("1 - Check api health success", function () {
+      expect(responseCAPIH.success).to.be.equal(true);
+  });
+  test("1 - Check api health status", function () {
+      expect(responseCAPIH.status).to.be.equal(200);
+  });
+  test("1 - Check api health message", function () {
+      expect(responseCAPIH.message).to.be.equal("Notes API is Running");
+  });
+  
+  
+}

@@ -1,0 +1,29 @@
+meta {
+  name: 16-3 - Delete user account
+  type: http
+  seq: 43
+}
+
+delete {
+  url: {{base_url}}/users/delete-account
+  body: none
+  auth: none
+}
+
+headers {
+  X-Auth-Token: {{user_token}}
+}
+
+tests {
+  let responseDU = res.getBody();
+  
+  test("16.3 - Check delete user account success", function () {
+      expect(responseDU.success).to.be.equal(true);
+  });
+  test("16.3 - Check delete user account status", function () {
+      expect(responseDU.status).to.be.equal(200);
+  });
+  test("16.3 - Check delete user account message", function () {
+      expect(responseDU.message).to.be.equal("Account successfully deleted");
+  });
+}

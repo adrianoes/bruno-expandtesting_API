@@ -1,0 +1,38 @@
+meta {
+  name: 11-3 - Update an existing note - unauthorized request
+  type: http
+  seq: 28
+}
+
+put {
+  url: {{base_url}}/notes/{{note_id}}
+  body: json
+  auth: none
+}
+
+headers {
+  X-Auth-Token: @{{user_token}}
+}
+
+body:json {
+  {
+      "title":"{{note_title}}",
+      "description":"{{note_description}}",
+      "category":"{{note_category}}",
+      "completed":"{{note_completed}}"
+  }
+}
+
+tests {
+  let responseUNBR = res.getBody();
+  
+  test("11.3  - Check update an existing note - unauthorized request success", function () {
+      expect(responseUNBR.success).to.be.equal(false);
+  });
+  test("11.3  - Check update an existing note - unauthorized request status", function () {
+      expect(responseUNBR.status).to.be.equal(401);
+  });
+  test("11.3  - Check update an existing note - unauthorized request message", function () {
+      expect(responseUNBR.message).to.be.equal("Access token is not valid or has expired, you will need to login");
+  });
+}

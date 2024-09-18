@@ -1,0 +1,38 @@
+meta {
+  name: 11-2 - Update an existing note - bad request
+  type: http
+  seq: 27
+}
+
+put {
+  url: {{base_url}}/notes/{{note_id}}
+  body: json
+  auth: none
+}
+
+headers {
+  X-Auth-Token: {{user_token}}
+}
+
+body:json {
+  {
+      "title":"{{note_title}}",
+      "description":"{{note_description}}",
+      "category":"a",
+      "completed":"{{note_completed}}"
+  }
+}
+
+tests {
+  let responseUNBR = res.getBody();
+  
+  test("11.2  - Check update an existing note - bad request success", function () {
+      expect(responseUNBR.success).to.be.equal(false);
+  });
+  test("11.2  - Check update an existing note - bad request status", function () {
+      expect(responseUNBR.status).to.be.equal(400);
+  });
+  test("11.2  - Check update an existing note - bad request message", function () {
+      expect(responseUNBR.message).to.be.equal("Category must be one of the categories: Home, Work, Personal");
+  });
+}

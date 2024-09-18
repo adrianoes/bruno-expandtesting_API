@@ -1,0 +1,29 @@
+meta {
+  name: 14-3 - Log out a user
+  type: http
+  seq: 37
+}
+
+delete {
+  url: {{base_url}}/users/logout
+  body: none
+  auth: none
+}
+
+headers {
+  X-Auth-Token: {{user_token}}
+}
+
+tests {
+  let responseLOU = res.getBody();
+  
+  test("14.3 - Check log out a user success", function () {
+      expect(responseLOU.success).to.be.equal(true);
+  });
+  test("14.3 - Check log out a user status", function () {
+      expect(responseLOU.status).to.be.equal(200);
+  });
+  test("14.3 - Check log out a user message", function () {
+      expect(responseLOU.message).to.be.equal("User has been successfully logged out");
+  });
+}

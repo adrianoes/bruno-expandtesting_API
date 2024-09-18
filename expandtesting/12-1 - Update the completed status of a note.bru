@@ -1,0 +1,66 @@
+meta {
+  name: 12-1 - Update the completed status of a note
+  type: http
+  seq: 29
+}
+
+patch {
+  url: {{base_url}}/notes/{{note_id}}
+  body: json
+  auth: none
+}
+
+headers {
+  X-Auth-Token: {{user_token}}
+}
+
+body:json {
+  {
+      "completed":"{{note_completed}}"
+  }
+}
+
+script:pre-request {
+  if (bru.getEnvVar("note_completed") == false) { 
+  bru.setEnvVar("note_completed", true);
+  }
+  else { 
+  bru.setEnvVar("note_completed", false);
+  }
+}
+
+tests {
+  let responseUCSN = res.getBody();
+  
+  test("12.1 - Check update the completed status of a note success", function () {
+      expect(responseUCSN.success).to.be.equal(true);
+  });
+  test("12.1 - Check update the completed status of a note status", function () {
+      expect(responseUCSN.status).to.be.equal(200);
+  });
+  test("12.1 - Check update the completed status of a note message", function () {
+      expect(responseUCSN.message).to.be.equal("Note successfully Updated");
+  });
+  test("12.1 - Assert note id", function () {
+      expect(bru.getEnvVar("note_id")).to.be.equal(responseUCSN.data.id);
+  });
+  test("12.1 - Assert note title", function () {
+      expect(bru.getEnvVar("note_title")).to.be.equal(responseUCSN.data.title);
+  });
+  test("12.1 - Assert note description", function () {
+      expect(bru.getEnvVar("note_description")).to.be.equal(responseUCSN.data.description);
+  });
+  test("12.1 - Assert note category", function () {
+      expect(bru.getEnvVar("note_category")).to.be.equal(responseUCSN.data.category);
+  });
+  test("12.1 - Assert note completed", function () {
+      // It uses == due to the fact that the compared values are a boolean and a string
+      expect(bru.getEnvVar("note_completed")) == (responseUCSN.data.completed);
+  });
+  test("12.1 - Assert note created_at", function () {
+      expect(bru.getEnvVar("note_created_at")).to.be.equal(responseUCSN.data.created_at);
+  });
+  test("12.1 - Assert user id for note", function () {
+      expect(bru.getEnvVar("user_id")).to.be.equal(responseUCSN.data.user_id);
+  });
+}

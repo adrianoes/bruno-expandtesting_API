@@ -1,0 +1,32 @@
+meta {
+  name: 3-3 - Log in as an existing user - unauthorized request
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{base_url}}/users/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "email":"{{user_email}}",
+      "password":"@{{user_password}}"
+  }
+}
+
+tests {
+  let responseLUUR = res.getBody();
+  
+  test("3.3 - Check log in as an existing user - unauthorized request success", function () {
+      expect(responseLUUR.success).to.be.equal(false);
+  });
+  test("3.3 - Check log in as an existing user - unauthorized request status", function () {
+      expect(responseLUUR.status).to.be.equal(401);
+  });
+  test("3.3 - Check log in as an existing user - unauthorized request message", function () {
+      expect(responseLUUR.message).to.be.equal("Incorrect email address or password");
+  });
+}
