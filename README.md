@@ -1,4 +1,4 @@
-# bruno-expandtesting_API
+# bruno-expandtesting_api
 
 API testing in [expandtesting](https://practice.expandtesting.com/notes/api/api-docs/). This project contains basic examples on how to use Bruno to test API. All the necessary support documentation to develop this project is placed here.
 
